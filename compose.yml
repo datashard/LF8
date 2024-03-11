@@ -1,0 +1,27 @@
+version: "3.3"
+
+services:
+  db:
+    image: "mysql:8"
+    container_name: "db"
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./entrypoint:/docker-entrypoint-initdb.d/
+      - ./mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+    environment:
+      TZ: "Europe/Berlin"
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_DATABASE: jch
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+  # app:
+  #   build: ./QuizzApp
+  #   container_name: app
+  #   ports:
+  #     - 80:80
+  #     - "443:443"
