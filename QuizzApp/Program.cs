@@ -1,9 +1,17 @@
+using QuizzApp.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+//Needs fixing
+IConfiguration config = new ConfigurationManager().GetConnectionString();
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddDbContext<DataContext>(options =>
+{
+    options.UseModel(config.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddControllers();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
