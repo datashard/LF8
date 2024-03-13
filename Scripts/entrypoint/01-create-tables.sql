@@ -29,7 +29,7 @@ create table
     score (
         id integer not null auto_increment,
         score bigint not null,
-        P player integer not null,
+        player integer not null,
         time datetime not null default current_timestamp(),
         FOREIGN KEY (player) references players (id)
     ) ENGINE = InnoDB;
