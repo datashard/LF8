@@ -1,16 +1,22 @@
+using Microsoft.EntityFrameworkCore;
 using QuizzApp.Data;
+using QuizzApp.DTOs;
 
 var builder = WebApplication.CreateBuilder(args);
-//Needs fixing
-IConfiguration config = new ConfigurationManager().GetConnectionString();
 
 // Add services to the container.
 
-builder.Services.AddControllersWithViews();
+//Config DB
 builder.Services.AddDbContext<DataContext>(options =>
 {
-    options.UseModel(config.GetConnectionString("DefaultConnection"));
+    var connectionString = builder.Configuration.GetConnectionString("local");
+    options.UseSqlServer(connectionString);
 });
+builder.Services.AddControllersWithViews();
+// builder.Services.AddDbContext<DataContext>(options =>
+// {
+//     options.UseModel(config.GetConnectionString("DefaultConnection"));
+// });
 builder.Services.AddControllers();
 var app = builder.Build();
 
