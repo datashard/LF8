@@ -17,7 +17,7 @@ services:
       TZ: "Europe/Berlin"
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin
-      MYSQL_DATABASE: jch
+      MYSQL_DATABASE: quizz
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
   # app:
   #   build: ./QuizzApp
