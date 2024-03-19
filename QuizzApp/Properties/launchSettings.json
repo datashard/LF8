@@ -3,7 +3,11 @@
     "QuizzApp": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:7262;http://localhost:5277"
+      "applicationUrl": "https://localhost:7262;http://localhost:5277",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
+      }
       }
     },
     "IIS Express": {
