@@ -1,35 +1,30 @@
-drop database if exists quizz;
-
-create database if not exists quizz;
-
-create table
-    category (
-        id integer not null auto_increment,
-        category VARCHAR(255),
-        PRIMARY KEY (id)
-    ) ENGINE = InnoDB;
+CREATE TABLE
+    category (id serial primary key, category text not null);
 
 create table
     questions (
-        id integer not null auto_increment,
-        question TEXT not null,
-        category VARCHAR(255),
+        id serial primary key,
+        question text not null,
+        difficulty text not null,
+        correct_answer text not null,
+        wrong_answers text array,
+        category integer not null,
         FOREIGN KEY (category) references category (id)
-    ) ENGINE = InnoDB;
+    );
 
 create table
     players (
-        id integer not null auto_increment,
-        username VARCHAR(255) not null,
-        password VARCHAR(255) not null,
-        PRIMARY KEY (id)
-    ) ENGINE = InnoDB;
+        id serial primary key,
+        username text not null,
+        admin boolean NOT NULL DEFAULT false,
+        password text not null
+    );
 
 create table
     score (
-        id integer not null auto_increment,
+        id serial primary key,
         score bigint not null,
         player integer not null,
-        time datetime not null default current_timestamp(),
+        time timestamp not null default current_timestamp,
         FOREIGN KEY (player) references players (id)
-    ) ENGINE = InnoDB;
+    );

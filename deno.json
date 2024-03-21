@@ -1,6 +1,5 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts",
-    "questions": "deno run --allow-all ./Scripts/deno/collectQuestions.ts"
+    "questions": "deno run --allow-net --allow-run --allow-read --allow-write ./Scripts/deno/collectQuestions.ts"
   }
 }
