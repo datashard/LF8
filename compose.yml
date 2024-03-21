@@ -2,26 +2,66 @@ version: "3.3"
 
 services:
   db:
-    image: "mysql:8"
+    image: postgres:latest
     container_name: "db"
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - ./Scripts/entrypoint:/docker-entrypoint-initdb.d/
-      - ./mysql:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      timeout: 5s
-      retries: 10
+      - ./Scripts/entrypoint/:/docker-entrypoint-initdb.d/
+      - ./docker_data/postgres:/var/lib//postgresql/data/
     environment:
-      TZ: "Europe/Berlin"
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
-      MYSQL_DATABASE: quizz
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: quizz
+    networks:
+      - caddy
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - db
+    networks:
+      - caddy
+    volumes:
+      - ./docker_data/pgadmin-data/:/var/lib/pgadmin/
+    environment:
+      POSTGRES_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: pg@localhost.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    user: "$UID:$GID"
+    labels:
+      caddy: localhost
+      caddy.reverse_proxy: "{{upstreams}}"
+      caddy_1: http://discordapp.io, http://caddy.lion
+      caddy_1.reverse_proxy: "{{upstreams}}"
+  caddy:
+    image: videah/caddy-proxy:latest
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      - CADDY_INGRESS_NETWORKS=caddy
+    networks:
+      - caddy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./docker_data/caddy_data:/data
+    restart: unless-stopped
   # app:
   #   build: ./QuizzApp
   #   container_name: app
-  #   ports:
-  #     - 80:80
-  #     - "443:443"
+  #   labels:
+  #     caddy: localhost
+  #     caddy.0_reverse_proxy: /* "{{upstreams 5277}}"
+  #     caddy.1_reverse_proxy: /api/ "{{upstreams 7262}}"
+  #   networks:
+  #     - caddy
+
+volumes:
+  caddy_data: {}
+
+networks:
+  caddy:
+    external: true
+  # postgres-network:
+  #   driver: bridge

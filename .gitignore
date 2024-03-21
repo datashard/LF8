@@ -3,3 +3,4 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+docker_data/pgadmin-data/pgadmin4.db
