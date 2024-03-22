@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using QuizzApp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,11 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 //Config DB
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<DataContext>(options =>
-{
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-});
+
+builder.Services.AddDbContext<DataContext>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

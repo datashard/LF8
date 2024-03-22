@@ -5,15 +5,18 @@ namespace QuizzApp.Data;
 
 public class DataContext: DbContext
 {
-    public DataContext(DbContextOptions<DataContext> options) : base(options)
+    private readonly IConfiguration Configuration;
+
+    public DataContext(IConfiguration configuration)
     {
-        
+        Configuration = configuration;
     }
 
-    protected void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnConfiguring(DbContextOptionsBuilder  options)
     {
         // Seed Data can be executed in this method.
-        base.OnModelCreating(modelBuilder);
+        options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
     }
-    public DbSet<User> Users { get; set; }
+    public DbSet<Player> Players { get; set; }
+    
 }

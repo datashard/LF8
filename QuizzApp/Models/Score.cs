@@ -4,8 +4,8 @@ namespace QuizzApp.Models;
 
 public class Score
 {
-    [Key] 
+     
     public int Id { get; set; }
-    public User User { get; set; }
+    public Player Player { get; set; }
     public int score { get; set; }
 }
