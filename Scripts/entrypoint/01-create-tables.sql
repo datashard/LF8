@@ -4,6 +4,7 @@ CREATE TABLE
 create table
     questions (
         id serial primary key,
+        type text not null,
         question text not null,
         difficulty text not null,
         correct_answer text not null,

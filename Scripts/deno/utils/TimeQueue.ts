@@ -15,6 +15,7 @@ export class TimedQueue extends EventEmitter<Events> {
   private queue: Array<TimedJob> = [];
   private tHandle: any = null;
   private done: boolean = true;
+  private StartingLength: number = 0;
   constructor() {
     super();
   }
@@ -38,6 +39,9 @@ export class TimedQueue extends EventEmitter<Events> {
   }
 
   start() {
+    this.StartingLength = this.queue.length;
+    this.emit("length", this.queue.length, this.StartingLength);
+    
     if (!this.done) {
       throw new Error("Job already started");
     }
@@ -45,6 +49,7 @@ export class TimedQueue extends EventEmitter<Events> {
       throw new Error("Job Queue is empty");
     }
     this.done = false;
+
     this.tHandle = setTimeout(() => {
       this.next();
     }, 0);
@@ -59,6 +64,7 @@ export class TimedQueue extends EventEmitter<Events> {
     let job: TimedJob | undefined = this.queue.shift();
     job?.callback.call(null);
     this.tHandle = setTimeout(() => {
+      this.emit("length", this.queue.length, this.StartingLength);
       this.next();
     }, job?.time);
   }

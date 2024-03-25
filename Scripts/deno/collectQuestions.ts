@@ -17,6 +17,11 @@ const Spinner = wait({
 }).start();
 
 const Q = new TimedQueue();
+let requestedCategories: number;
+
+Q.on("length", (a, b) => {
+  requestedCategories = b - a ;
+});
 
 const SessionToken =
   (await fetch("https://opentdb.com/api_token.php?command=request").then((r) =>
@@ -26,11 +31,11 @@ sleep(6000);
 
 const Questions: Set<Question> = new Set();
 const Categories: Set<ReqCategory> = new Set();
-let finalContent: string;
+// let finalContent: string;
 
-const getQuestions = async (category: number, amount: number = 1) => {
+const getQuestions = async (category: number, amount: number = 30) => {
   try {
-    Spinner.text = `Requesting ${amount} "${
+    Spinner.text = `[${requestedCategories+1}/${Categories.size}] | Requesting ${amount} "${
       Array.from(Categories).filter((a) => a.id == category)[0].name
     }" Questions`;
 
@@ -74,7 +79,7 @@ const getQuestionsForCategories = () => {
       callback: async () => {
         handleQuestions((await getQuestions(cat.id)).results);
       },
-      time: 6000,
+      time: 7000,
     });
   });
 };
@@ -94,10 +99,12 @@ const insertQuestion = (question: Question) => {
     formatValue(question.type)
   }', '${formatValue(question.question)}', '${
     formatValue(question.difficulty)
-  }', '${formatValue(question.correct_answer)}', {${
-    formatValue(question.incorrect_answers.toString())
-  }}, (select (id) from category where category.category = '${
-    formatValue(question.category)
+  }', '${formatValue(question.correct_answer)}', '{${
+    question.incorrect_answers.map((it) => {
+      return `${formatValue(it)}`;
+    }).join(",")
+  }}', (select (id) from category where category.category = '${
+    formatValue(question.category).replaceAll('&amp;', '&')
   }'));`;
 };
 
@@ -117,37 +124,41 @@ ${
 ${
     Array.from(Questions).map((q) => {
       return insertQuestion(q);
-    }).join("\n\n")
+    }).join("\n")
   }
   
   `;
 };
 
+const path = `Scripts/entrypoint/02-insert-content.sql`;
+
 async function write() {
   const content = createFile();
 
-  await Deno.writeTextFile(`../entrypoint/02-insert-content.sql`, content, {
-    create: true,
-  });
+  await Deno.writeTextFile(
+    path,
+    content,
+    {
+      create: true,
+    },
+  );
 }
-
-Q.on("done", async () => {
-  finalContent = createFile();
-  await write();
-  Spinner.succeed("02-insert-content.sql generated");
-});
 
 if (import.meta.main) {
   try {
     await handleCategories(await getCategories());
     await getQuestionsForCategories();
     Q.start();
-    console.log(import.meta)
-    ensureFileSync(`../entrypoint/02-insert-content.sql`);
+    ensureFileSync(path);
+    Q.on("done", async () => {
+      createFile();
+      await write();
+      Spinner.succeed("02-insert-content.sql generated");
+      Deno.exit(0);
+    });
   } catch (error) {
     console.error(error);
     Spinner.fail("Encountered an Error");
     Deno.exit(1);
   }
-  Deno.exit(0);
 }
