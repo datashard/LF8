@@ -18,5 +18,9 @@ public class DataContext: DbContext
         options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
     }
     public DbSet<Player> Players { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Question> Questions { get; set; }
+    public DbSet<Score> Scores { get; set; }
+
     
 }
