@@ -18,7 +18,7 @@ create table
         id serial primary key,
         username text not null,
         admin boolean NOT NULL DEFAULT false,
-        password text not null
+        -- password text not null
     );
 
 create table

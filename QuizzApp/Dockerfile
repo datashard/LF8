@@ -6,7 +6,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 # Install Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y \
         nodejs \
     && rm -rf /var/lib/apt/lists/*
@@ -14,8 +14,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
 WORKDIR /src
 COPY ["QuizzApp.csproj", "QuizzApp/"]
 RUN dotnet restore "QuizzApp/QuizzApp.csproj"
-COPY . .
 WORKDIR "/src/QuizzApp"
+COPY . .
 RUN dotnet build "QuizzApp.csproj" -c Release -o /app/build
 
 FROM build AS publish
@@ -24,4 +24,5 @@ RUN dotnet publish "QuizzApp.csproj" -c Release -o /app/publish /p:UseAppHost=fa
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+# ENTRYPOINT ["dotnet", "QuizzApp.dll", "--urls", "http://*:5000"]
 ENTRYPOINT ["dotnet", "QuizzApp.dll"]
