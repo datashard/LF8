@@ -3,24 +3,25 @@ import { createStore } from "zustand/vanilla";
 
 export type QuestionState = {
   questions: Question[];
+  answered: number;
 };
 
 export type QuestionActions = {
   setQuestions: (qs: Question[]) => void;
+  answeredQuestion: () => void;
   getFilteredQuestion?: (categories: string) => Question[];
   getCategories: () => string[];
-  _hasHydrated: boolean;
-  setHasHydrated: (state: any) => void;
 };
 
 export type QuestionStore = QuestionState & QuestionActions;
 
 export const initQuestionStore = (): QuestionState => {
-  return { questions: [] };
+  return { questions: [], answered: 0 };
 };
 
 export const defaultInitState: QuestionState = {
   questions: [],
+  answered: 0,
 };
 
 export const createQuestionStore = (
@@ -29,17 +30,12 @@ export const createQuestionStore = (
   return createStore<QuestionStore>()((set, get) => ({
     ...initState,
     setQuestions: (qs: Question[]) => set(() => ({ questions: qs })),
+    answeredQuestion: () => set(() => ({ answered: get().answered + 1 })),
     getFilteredQuestions: (categories: string[]) =>
       get().questions.filter((question) =>
         categories.includes(question.category)
       ),
     getCategories: () => getUniqueCategories(get().questions),
-    _hasHydrated: false,
-      setHasHydrated: (state: any) => {
-        set({
-          _hasHydrated: state,
-        });
-      },
   }));
 };
 

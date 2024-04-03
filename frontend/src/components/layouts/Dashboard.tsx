@@ -12,11 +12,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import React, { useMemo } from "react";
-import useStore from "@/lib/useStore";
-import questions from "@/pages/questions";
-import { useQuestionStore } from "@/providers/Questions";
 import { QuestionStore } from "@/stores/Questions";
+import { useQuestionStore } from "@/providers/Questions";
 import axios from "axios";
+import { useEffect } from "react";
 
 const SidebarItems = [
   {
@@ -47,6 +46,23 @@ export default function Dashboard({
   page?: string;
   children: React.ReactNode;
 }) {
+  const { questions, setQuestions } = useQuestionStore((s) => s);
+
+  useEffect(() => {
+    if (questions.length === 0) {
+      axios
+        .get("/api/questions", {
+          baseURL:
+            process.env.NODE_ENV === "development"
+              ? "http://localhost:3000/"
+              : undefined,
+        })
+        .then((r) => {
+          setQuestions(r.data);
+        });
+    }
+  }, [questions]);
+
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-muted/40 md:block">
@@ -96,7 +112,7 @@ export default function Dashboard({
             <SheetContent side="left" className="flex flex-col">
               <nav className="grid gap-2 text-lg font-medium">
                 <Link
-                key={'awawawa'}
+                  key={"awawawa"}
                   href="/"
                   className="flex items-center gap-2 text-lg font-semibold"
                 >
