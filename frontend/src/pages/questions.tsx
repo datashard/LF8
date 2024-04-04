@@ -11,12 +11,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useQuestionStore } from "@/providers/Questions";
+import he from "he"
 
-
-export default function Leaderboard() {
+export default function Questions() {
   const { questions } = useQuestionStore((s) => s);
-  
-  console.log(questions)
 
   return (
     <>
@@ -38,7 +36,7 @@ export default function Leaderboard() {
               return (
                 <TableRow key={k}>
                   <TableCell className="font-medium">{q.id}</TableCell>
-                  <TableCell>{q.question}</TableCell>
+                  <TableCell>{he.decode(q.question)}</TableCell>
                   <TableCell>{q.category}</TableCell>
                   <TableCell>{q.difficulty}</TableCell>
                   <TableCell>{q.type}</TableCell>

@@ -1,17 +1,17 @@
 import Dashboard from "@/components/layouts/Dashboard";
 import { Button } from "@/components/ui/button";
-import { useStreakStore } from "@/providers/Streak";
-import { useForm } from "react-hook-form";
 import { Question } from "@/types/Questions";
+import { useStreakStore } from "@/providers/Streak";
+import { useScoreStore } from "@/providers/Score";
 import { useQuestionStore } from "@/providers/Questions";
-import { StreakStore } from "@/stores/Streak";
 import { QuestionStore } from "@/stores/Questions";
+import { StreakStore } from "@/stores/Streak";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
-  CarouselPrevious,
+  useCarousel,
 } from "@/components/ui/carousel";
 import {
   Card,
@@ -20,21 +20,82 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import he from "he";
+import { ScoreStore } from "@/stores/Score";
+import useTimer from "@/lib/hooks/useTimer";
+import { useCallback, useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
+import statements from "@/lib/statements";
+import Link from "next/link";
+import sql from "@/lib/sql";
+import axios from "axios";
+import { useToast } from "@/components/ui/use-toast";
+// import Timer from "@/components/custom/Timer";
 
 export default function Play() {
   const QStore = useQuestionStore((s) => s);
-  const streak = useStreakStore((state) => state);
-  const answeredList = [];
+  const StreakStore = useStreakStore((s) => s);
+  const ScoreStore = useScoreStore((s) => s);
+  const { timer, setTimer } = useTimer(-1);
+  const [username, setUsername] = useState("Anon");
+  const [disabled, setDisabled] = useState(false);
+  const { toast } = useToast();
+
+  const stopGame = () => {
+    document.getElementById("game")?.classList.add("hidden");
+    document.getElementById("end")?.classList.remove("hidden");
+  };
 
   const hideStart = () => {
     document.getElementById("start")?.classList.add("hidden");
     document.getElementById("game")?.classList.remove("hidden");
+
+    setTimer(5 * 60);
+    // setTimer(5);
+    setDisabled(false);
+    ScoreStore.resetScore();
   };
 
+  useEffect(() => {
+    if (username === "") setUsername("Anon");
+  }, [username]);
+
+  useEffect(() => {
+    if (timer === 0) stopGame();
+  }, [timer]);
+
+  const submitScore = async () => {
+    console.log("submitting Score");
+    axios
+      .post("/api/points", { score: ScoreStore.score, username })
+      .then((r) => {
+        toast({
+          title: "Score submitted",
+          description: r.data,
+        });
+      });
+    document.getElementById("submitButton")?.setAttribute("disabled", "true");
+  };
+
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes < 10 ? "0" : ""}${minutes}:${
+      seconds < 10 ? "0" : ""
+    }${seconds}`;
+  };
   return (
     <>
       <Dashboard page="Play">
         <div className="self-center">
+          <div className="p-4">
+            <Input
+              type="text"
+              placeholder="Username"
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
           <div id="start" className="">
             <h1 className="font-medium text-xl">
               Welcome to <span className="font-bold">Quizz</span>
@@ -42,16 +103,73 @@ export default function Play() {
             <div className="text-zinc-400 mt-5 mb-5">
               <p>
                 The Goal is to answer as many questions correctly as possible{" "}
-                <br /> within the Timelimit
+                <br /> within the Timelimit (5 Minutes)
               </p>
               <p>Are you ready?</p>
             </div>
             <Button className="bg-green-600 text-white" onClick={hideStart}>
-              Yes!
+              I'm Ready
             </Button>
           </div>
-          <div id="game" className="bg-zinc-900 rounded-xl hidden">
-            <FormThing streak={streak} QStore={QStore} />
+
+          <div
+            id="timer"
+            className={`flex justify-around ${
+              timer >= 0 ? "visible" : "hidden"
+            }`}
+          >
+            {timer >= 0 && <h1 id="time">{formatTime(timer)}</h1>}
+            {ScoreStore.score >= 0 && <h1 id="score">{ScoreStore.score}</h1>}
+          </div>
+          <div id="game" className="hidden">
+            <FormThing
+              score={ScoreStore}
+              streak={StreakStore}
+              QStore={QStore}
+            />
+          </div>
+          <div id="end" className="hidden">
+            <Card>
+              <CardHeader>
+                <CardTitle>
+                  {username === "Anon" || username === ""
+                    ? "Submit your Score?"
+                    : `Congrats ${username}!`}
+                </CardTitle>
+                <CardDescription>
+                  You managed to get{" "}
+                  <span className="font-bold">{ScoreStore.score} Points!</span>{" "}
+                  <br />
+                  {username === "Anon" || username === "" ? (
+                    <span>
+                      Would you like to to set a Username? <br />
+                      If not, and you choose to submit your Score, it will be
+                      published anonymously, using the handle "Anon"
+                    </span>
+                  ) : (
+                    <span>
+                      Your Score will be published under the handle "{username}"
+                    </span>
+                  )}
+                  <br />
+                  <br />
+                  Would you like to publish your score to our Leaderboard?
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex justify-between">
+                <Button
+                  id="submitButton"
+                  variant={"default"}
+                  onClick={submitScore}
+                  disabled={disabled}
+                >
+                  Publish it!
+                </Button>
+                <Link href={"/"}>
+                  <Button variant={"destructive"}>Please don't.</Button>
+                </Link>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </Dashboard>
@@ -59,11 +177,16 @@ export default function Play() {
   );
 }
 
-const FormThing = (props: { streak: StreakStore; QStore: QuestionStore }) => {
-  const form = useForm();
-  const streak = useStreakStore((state) => state);
-
+const FormThing = (props: {
+  score: ScoreStore;
+  streak: StreakStore;
+  QStore: QuestionStore;
+}) => {
+  // const form = useForm();
+  const StreakStore = useStreakStore((state) => state);
+  const ScoreStore = useScoreStore((s) => s);
   const Questions = randomizeQuestions(props.QStore.questions, 150);
+  const [questions] = useState(Questions);
 
   const submitAnswer = (
     selected: string,
@@ -71,101 +194,61 @@ const FormThing = (props: { streak: StreakStore; QStore: QuestionStore }) => {
     wrong: string[],
     qIDX: number
   ) => {
+
     if (selected == correct) {
-      console.log("Correct!", { selected, correct });
-      streak.increaseStreak();
+      StreakStore.increaseStreak();
+      ScoreStore.increaseScore(2 + StreakStore.streak);
     } else {
-      console.log("Wrong!", { selected, correct });
-      streak.resetStreak();
+      ScoreStore.increaseScore(1);
+      StreakStore.resetStreak();
     }
-    nextQuestion(qIDX);
   };
-
-  const nextQuestion = (current_Idx: number) => {
-    document.getElementById(`question-${current_Idx}`)?.classList.add("hidden");
-    document
-      .getElementById(`question-${current_Idx + 1}`)
-      ?.classList.add("visible");
-  };
-
   return (
     <>
       <Carousel
         className="w-full max-w-xl"
-        orientation="vertical"
+        // orientation="horizontal"
         opts={{
-          align: "center",
+          watchDrag: false,
+          // align: "center",
           startIndex: 0,
         }}
       >
-        <CarouselContent className="-mt-1">
-          {Questions?.map((q, k) => (
-            <CarouselItem key={k} className="pt-1 md:basis-1/2">
-              <div className="p-1 flex-col items-start">
-                <Card>
+        <CarouselContent className="-ml-2 md:-ml-4 ">
+          {questions?.map((q, k) => (
+            <CarouselItem
+              id={`question-${k}`}
+              key={k}
+              className="pl-2 md:pl-4 items-center opacity-100"
+            >
+              <div className="m-2 flex-col items-start ">
+                <Card className="relative">
+                  <Badge className="absolute right-4 top-4">
+                    Streak {StreakStore.streak}
+                  </Badge>
+
                   <CardContent className="grid grid-flow-column-dense items-center justify-center">
                     <CardHeader>
-                      <CardTitle>
-                        {q.category} - {q.difficulty}
-                      </CardTitle>
-                      <CardDescription>{q.question}</CardDescription>
+                      {k}
+                      <CardDescription>
+                        {he.decode(`${q.category} - ${q.difficulty}`)}
+                      </CardDescription>
+                      <br />
+                      <CardTitle>{he.decode(q.question)}</CardTitle>
                     </CardHeader>
-                    <div className="p-5">
-                      <QuestionType
-                        qIDX={k}
-                        question={q}
-                        submit={submitAnswer}
-                      />
+                    <div className="flex justify-around flex-col">
+                      {/* @ts-ignore */}
+                      <CarouselNext question={q} submit={submitAnswer} />
                     </div>
                   </CardContent>
-                  {/* <CarouselPrevious /> */}
-                  {/* <CarouselNext /> */}
                 </Card>
               </div>
             </CarouselItem>
           ))}
         </CarouselContent>
-        {/* <CarouselPrevious /> */}
-        <CarouselNext />
       </Carousel>
     </>
   );
-
-  // return (
-  //   <Form {...form}>
-  //     <form className="flex flex-col">
-  //       {Questions?.map((q, k) => {
-  //         return (
-  //           <div id={`question-${k}`} className="" key={k}>
-  //             <h1 className="p-2 text-1xl font-bold text-zinc-500">
-  //               {q.category} ({q.difficulty})
-  //             </h1>
-  //             <FormField
-  //               control={form.control}
-  //               name={`question-${k}`}
-  //               render={({ field }) => (
-  //                 <FormItem>
-  //                   <FormLabel className="p-2 font-normal ">
-  //                     {q.question} _ {q.correct_answer} _ {k}
-  //                   </FormLabel>
-  //                   <br />
-  //                   <FormControl className="p-5 grid grid-flow-row-dense grid-cols-3 grid-rows-3">
-  // <QuestionType
-  //   qIDX={k}
-  //   question={q}
-  //   submit={submitAnswer}
-  // />
-  //                   </FormControl>
-  //                   <FormMessage />
-  //                 </FormItem>
-  //               )}
-  //             />
-  //           </div>
-  //         );
-  //       })}
-  //     </form>
-  //   </Form>
-  // );
 };
 
 function randomizeQuestions(
@@ -175,77 +258,4 @@ function randomizeQuestions(
   if (!questions) return;
   const shuffled = questions.sort(() => 0.5 - Math.random());
   return shuffled.slice(0, amount);
-}
-
-function QuestionType({
-  submit,
-  question,
-  qIDX,
-}: {
-  submit: (
-    selected: string,
-    correct: string,
-    wrong: string[],
-    qIDX: number
-  ) => void;
-  question: Question;
-  qIDX: number;
-}) {
-  switch (question.type) {
-    case "multiple":
-      return [question.correct_answer, ...question.wrong_answers]
-        .sort(() => 0.5 - Math.random())
-        .map((qa, k) => {
-          return (
-            <Button
-              className="m-2 p-4"
-              onClick={(e) => {
-                e.preventDefault();
-                submit(
-                  qa,
-                  question.correct_answer,
-                  question.wrong_answers,
-                  qIDX
-                );
-              }}
-              key={k}
-            >
-              {qa}
-            </Button>
-          );
-        });
-    case "boolean":
-      return (
-        <>
-          <Button
-            className="m-2 p-4"
-            onClick={(e) => {
-              e.preventDefault();
-              submit(
-                "True",
-                question.correct_answer,
-                question.wrong_answers,
-                qIDX
-              );
-            }}
-          >
-            True
-          </Button>
-          <Button
-            className="m-2 p-4"
-            onClick={(e) => {
-              e.preventDefault();
-              submit(
-                "False",
-                question.correct_answer,
-                question.wrong_answers,
-                qIDX
-              );
-            }}
-          >
-            False
-          </Button>
-        </>
-      );
-  }
 }

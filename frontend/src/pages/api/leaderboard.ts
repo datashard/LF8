@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const result = await sql`"select q.id, q.type, q.question, q.difficulty, q.correct_answer, q.wrong_answers, c.category from questions q left join category c on q.category = c.id";`
+    const result = await sql`select s.id, s.score, s.time, p.username from score s left join players p on s.player = p.id order by s.score desc;`
     return res.status(200).json(result);
   } catch (error) {
     console.log(error);

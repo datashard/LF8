@@ -151,7 +151,6 @@ if (import.meta.main) {
     Q.start();
     ensureFileSync(path);
     Q.on("done", async () => {
-      createFile();
       await write();
       Spinner.succeed("02-insert-content.sql generated");
       Deno.exit(0);
