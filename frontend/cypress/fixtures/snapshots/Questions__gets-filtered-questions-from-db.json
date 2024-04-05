@@ -1,0 +1,384 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "type": "boolean",
+      "question": "When you cry in space, your tears stick to your face.",
+      "difficulty": "easy",
+      "correct_answer": "True",
+      "wrong_answers": [
+        "False"
+      ],
+      "category": 1
+    },
+    {
+      "id": 2,
+      "type": "multiple",
+      "question": "What is the romanized Korean word for &quot;heart&quot;?",
+      "difficulty": "hard",
+      "correct_answer": "Simjang",
+      "wrong_answers": [
+        "Aejeong",
+        "Jeongsin",
+        "Segseu"
+      ],
+      "category": 1
+    },
+    {
+      "id": 3,
+      "type": "multiple",
+      "question": "Which one of the following rhythm games was made by Harmonix?",
+      "difficulty": "easy",
+      "correct_answer": "Rock Band",
+      "wrong_answers": [
+        "Meat Beat Mania",
+        "Guitar Hero Live",
+        "Dance Dance Revolution"
+      ],
+      "category": 1
+    },
+    {
+      "id": 4,
+      "type": "multiple",
+      "question": "Which restaurant&#039;s mascot is a clown?",
+      "difficulty": "easy",
+      "correct_answer": "McDonald&#039;s",
+      "wrong_answers": [
+        "Whataburger",
+        "Burger King",
+        "Sonic"
+      ],
+      "category": 1
+    },
+    {
+      "id": 5,
+      "type": "multiple",
+      "question": "Which slogan did the fast food company, McDonald&#039;s, use before their &quot;I&#039;m Lovin&#039; It&quot; slogan?",
+      "difficulty": "medium",
+      "correct_answer": "We Love to See You Smile",
+      "wrong_answers": [
+        "Why Pay More!?",
+        "Have It Your Way",
+        "Making People Happy Through Food"
+      ],
+      "category": 1
+    },
+    {
+      "id": 6,
+      "type": "boolean",
+      "question": "Furby was released in 1998.",
+      "difficulty": "medium",
+      "correct_answer": "True",
+      "wrong_answers": [
+        "False"
+      ],
+      "category": 1
+    },
+    {
+      "id": 7,
+      "type": "multiple",
+      "question": "Which of the following is an existing family in &quot;The Sims&quot;?",
+      "difficulty": "hard",
+      "correct_answer": "The Goth Family",
+      "wrong_answers": [
+        "The Family",
+        "The Simoleon Family",
+        "The Proud Family"
+      ],
+      "category": 1
+    },
+    {
+      "id": 8,
+      "type": "multiple",
+      "question": "Which of the General Mills Corporation&#039;s monster cereals was the last to be released in the 1970&#039;s?",
+      "difficulty": "medium",
+      "correct_answer": "Fruit Brute",
+      "wrong_answers": [
+        "Count Chocula",
+        "Franken Berry",
+        "Boo-Berry"
+      ],
+      "category": 1
+    },
+    {
+      "id": 9,
+      "type": "multiple",
+      "question": "Which country, not including Japan, has the most people of japanese decent?",
+      "difficulty": "easy",
+      "correct_answer": "Brazil",
+      "wrong_answers": [
+        "China",
+        "South Korea",
+        "United States of America"
+      ],
+      "category": 1
+    },
+    {
+      "id": 10,
+      "type": "multiple",
+      "question": "What is the name of the Jewish New Year?",
+      "difficulty": "easy",
+      "correct_answer": "Rosh Hashanah",
+      "wrong_answers": [
+        "Elul",
+        "New Year",
+        "Succoss"
+      ],
+      "category": 1
+    },
+    {
+      "id": 11,
+      "type": "multiple",
+      "question": "What is the official language of Brazil?",
+      "difficulty": "easy",
+      "correct_answer": "Portugese",
+      "wrong_answers": [
+        "Brazilian",
+        "Spanish",
+        "English"
+      ],
+      "category": 1
+    },
+    {
+      "id": 12,
+      "type": "multiple",
+      "question": "What is the name of NASA&rsquo;s most famous space telescope?",
+      "difficulty": "easy",
+      "correct_answer": "Hubble Space Telescope",
+      "wrong_answers": [
+        "Big Eye",
+        "Death Star",
+        "Millenium Falcon"
+      ],
+      "category": 1
+    },
+    {
+      "id": 13,
+      "type": "multiple",
+      "question": "In &quot;Battle Cats&quot;, what is Moneko / MISS Moneko&#039;s critical percentage rate?",
+      "difficulty": "hard",
+      "correct_answer": "15%",
+      "wrong_answers": [
+        "20%",
+        "10%",
+        "25%"
+      ],
+      "category": 1
+    },
+    {
+      "id": 14,
+      "type": "multiple",
+      "question": "What does the &quot;G&quot; mean in &quot;G-Man&quot;?",
+      "difficulty": "medium",
+      "correct_answer": "Government",
+      "wrong_answers": [
+        "Going",
+        "Ghost",
+        "Geronimo"
+      ],
+      "category": 1
+    },
+    {
+      "id": 15,
+      "type": "multiple",
+      "question": "The word &quot;aprosexia&quot; means which of the following?",
+      "difficulty": "hard",
+      "correct_answer": "The inability to concentrate on anything",
+      "wrong_answers": [
+        "The inability to make decisions",
+        "A feverish desire to rip one&#039;s clothes off",
+        "The inability to stand up"
+      ],
+      "category": 1
+    },
+    {
+      "id": 16,
+      "type": "multiple",
+      "question": "Which river flows through the Scottish city of Glasgow?",
+      "difficulty": "medium",
+      "correct_answer": "Clyde",
+      "wrong_answers": [
+        "Tay",
+        "Dee",
+        "Tweed"
+      ],
+      "category": 1
+    },
+    {
+      "id": 17,
+      "type": "multiple",
+      "question": "What does a funambulist walk on?",
+      "difficulty": "easy",
+      "correct_answer": "A Tight Rope",
+      "wrong_answers": [
+        "Broken Glass",
+        "Balls",
+        "The Moon"
+      ],
+      "category": 1
+    },
+    {
+      "id": 18,
+      "type": "boolean",
+      "question": "French is an official language in Canada.",
+      "difficulty": "easy",
+      "correct_answer": "True",
+      "wrong_answers": [
+        "False"
+      ],
+      "category": 1
+    },
+    {
+      "id": 19,
+      "type": "multiple",
+      "question": "Earl Grey tea is black tea flavoured with what?",
+      "difficulty": "medium",
+      "correct_answer": "Bergamot oil",
+      "wrong_answers": [
+        "Lavender",
+        "Vanilla",
+        "Honey"
+      ],
+      "category": 1
+    },
+    {
+      "id": 20,
+      "type": "multiple",
+      "question": "How long did it take the motorized window washers of the original World Trade Center to clean the entire exterior of the building?",
+      "difficulty": "hard",
+      "correct_answer": "1 Month",
+      "wrong_answers": [
+        "3 Weeks",
+        "1 Week",
+        "2 Months"
+      ],
+      "category": 1
+    },
+    {
+      "id": 21,
+      "type": "multiple",
+      "question": "Whose greyscale face is on the kappa emoticon on Twitch?",
+      "difficulty": "medium",
+      "correct_answer": "Josh DeSeno",
+      "wrong_answers": [
+        "Justin DeSeno",
+        "John DeSeno",
+        "Jimmy DeSeno"
+      ],
+      "category": 1
+    },
+    {
+      "id": 22,
+      "type": "multiple",
+      "question": "What is the Swedish word for &quot;window&quot;?",
+      "difficulty": "medium",
+      "correct_answer": "F&ouml;nster",
+      "wrong_answers": [
+        "H&aring;l",
+        "Sk&auml;rm",
+        "Ruta"
+      ],
+      "category": 1
+    },
+    {
+      "id": 23,
+      "type": "multiple",
+      "question": "Which iconic Disneyland attraction was closed in 2017 to be remodeled as a &quot;Guardians of the Galaxy&quot; themed ride?",
+      "difficulty": "medium",
+      "correct_answer": "Twilight Zone Tower of Terror",
+      "wrong_answers": [
+        "The Haunted Mansion",
+        "Pirates of the Caribbean",
+        "Peter Pan&#039;s Flight"
+      ],
+      "category": 1
+    },
+    {
+      "id": 24,
+      "type": "boolean",
+      "question": "Adolf Hitler was born in Australia. ",
+      "difficulty": "easy",
+      "correct_answer": "False",
+      "wrong_answers": [
+        "True"
+      ],
+      "category": 1
+    },
+    {
+      "id": 25,
+      "type": "multiple",
+      "question": "Which of the following chemicals are found in eggplant seeds?",
+      "difficulty": "hard",
+      "correct_answer": "Nicotine",
+      "wrong_answers": [
+        "Mescaline",
+        "Cyanide",
+        "Psilocybin"
+      ],
+      "category": 1
+    },
+    {
+      "id": 26,
+      "type": "multiple",
+      "question": "The words &quot;bungalow&quot; and &quot;shampoo&quot; originate from the languages of which country?",
+      "difficulty": "hard",
+      "correct_answer": "India",
+      "wrong_answers": [
+        "Papua New Guinea",
+        "Ethiopia",
+        "China"
+      ],
+      "category": 1
+    },
+    {
+      "id": 27,
+      "type": "multiple",
+      "question": "Before the 19th Century, the &quot;Living Room&quot; was originally called the...",
+      "difficulty": "hard",
+      "correct_answer": "Parlor",
+      "wrong_answers": [
+        "Open Room",
+        "Sitting Room",
+        "Loft"
+      ],
+      "category": 1
+    },
+    {
+      "id": 28,
+      "type": "multiple",
+      "question": "What is the Portuguese word for &quot;Brazil&quot;?",
+      "difficulty": "medium",
+      "correct_answer": "Brasil",
+      "wrong_answers": [
+        "Brazil",
+        "Brasilia",
+        "Bras&iacute;l"
+      ],
+      "category": 1
+    },
+    {
+      "id": 29,
+      "type": "multiple",
+      "question": "In &quot;Resident Evil 3&quot;, how many inventory slots does Jill have at the start of the game?",
+      "difficulty": "hard",
+      "correct_answer": "10",
+      "wrong_answers": [
+        "6",
+        "8",
+        "12"
+      ],
+      "category": 1
+    },
+    {
+      "id": 30,
+      "type": "boolean",
+      "question": "Nutella is produced by the German company Ferrero.",
+      "difficulty": "easy",
+      "correct_answer": "False",
+      "wrong_answers": [
+        "True"
+      ],
+      "category": 1
+    }
+  ]
+}

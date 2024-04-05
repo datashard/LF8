@@ -4,7 +4,7 @@ export default defineConfig({
   // @ts-ignore
   snapshot: {
     asFolders: true,
-    updateSnapshots: true,
+    updateSnapshots: false,
   },
   e2e: {
     baseUrl: "http://localhost:3000",
